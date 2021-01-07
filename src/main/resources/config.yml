@@ -1,0 +1,32 @@
+mysql:
+  host: 172.16.10.22
+  database: owncraftfb
+  username: owncraftfb
+  password: yavvachteOdghewcarf$
+  port: 3306
+  table-plots: plots
+  table-plots-settings: plots-settings
+  table-plots-challenges: plots-challenges
+
+# Cost for /ownplot create command
+plot-create-cost: 50000
+
+# Max size for plots
+# Every upgrade plot size increase
+# its size by +16
+plot-max-size: 64
+
+# Cost for increasing field upgrade
+plot-increase-field-cost: 30000
+
+# Cost for jump boost potion effect upgrade
+jump-boost-upgrade-cost: 75000
+
+# Cost for speed potion effect upgrade
+speed-upgrade-cost: 75000
+
+# Cost for mob drop upgrade
+mob-drop-upgrade-cost: 55000
+
+# Cost for mob exp drop upgrade
+mob-exp-upgrade-cost: 35000
