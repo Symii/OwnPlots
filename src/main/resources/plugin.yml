@@ -1,7 +1,7 @@
 name: OwnPlots
 main: eu.owncraft.plots.OwnPlots
 author: Symi
-version: 1.0.4
+version: 1.0.7
 api-version: 1.16
 website: https://owncraft.eu
 description: This plugin allows players to create plots on survival world

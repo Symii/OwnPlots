@@ -3,25 +3,44 @@ package eu.owncraft.plots.listeners;
 import eu.owncraft.plots.OwnPlots;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class EntityListeners implements Listener {
 
     private final OwnPlots plugin;
-
     public EntityListeners(OwnPlots plugin)
     {
         this.plugin = plugin;
     }
+
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakByEntityEvent event)
+    {
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world"))
+        {
+            return;
+        }
+
+        if(event.getRemover() instanceof Arrow)
+        {
+            Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
+            if(plot != null)
+            {
+                event.setCancelled(true);
+            }
+        }
+    }
+
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
@@ -31,9 +50,40 @@ public class EntityListeners implements Listener {
             return;
         }
 
-        if(event.getEntity() instanceof Player && event.getDamager() instanceof Player)
+        if(event.getEntity() instanceof ItemFrame || event.getEntity() instanceof ArmorStand)
+        {
+            if(event.getDamager() instanceof Projectile)
+            {
+                Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
+                if(plot != null)
+                {
+                    event.getDamager().remove();
+                    event.setCancelled(true);
+                }
+            }
+            else if(event.getDamager() instanceof Player)
+            {
+                final Player damager = (Player) event.getDamager();
+                if(damager.hasPermission("ownplots.admin"))
+                {
+                    return;
+                }
+                Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
+                if(plot != null && !plot.isMember(damager))
+                {
+                    event.setCancelled(true);
+                    damager.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz tego zrobic w tym miejscu!"));
+                    damager.playSound(damager.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                }
+            }
+        }
+        else if(event.getEntity() instanceof Player && event.getDamager() instanceof Player)
         {
             final Player damager = (Player) event.getDamager();
+            if(damager.hasPermission("ownplots.admin"))
+            {
+                return;
+            }
             final Player victim = (Player) event.getEntity();
             Plot plot = plugin.getPlotManager().getPlotAt(victim.getLocation());
             if(plot != null && !plot.getPlotSettings().isPvp())
@@ -55,6 +105,10 @@ public class EntityListeners implements Listener {
         else if(event.getDamager() instanceof Player)
         {
             final Player damager = (Player) event.getDamager();
+            if(damager.hasPermission("ownplots.admin"))
+            {
+                return;
+            }
             Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
             if(plot != null && !plot.getMembers().contains(damager.getName())
                     && !plot.getVisitorsSettings().isMob_damage())
@@ -64,7 +118,6 @@ public class EntityListeners implements Listener {
                 damager.playSound(damager.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
         }
-
     }
 
     @EventHandler

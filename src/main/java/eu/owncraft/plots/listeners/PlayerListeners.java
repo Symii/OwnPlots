@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -34,6 +35,23 @@ public class PlayerListeners implements Listener {
     public PlayerListeners(OwnPlots plugin)
     {
         this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onProjectileHit(ProjectileHitEvent event)
+    {
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
+            return;
+        }
+
+        if(event.getEntity().getType() == EntityType.ARROW)
+        {
+            Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
+            if(plot != null)
+            {
+                event.getEntity().remove();
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -325,19 +343,39 @@ public class PlayerListeners implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
         Player player = event.getPlayer();
         Location to = event.getTo();
         Location from = event.getFrom();
-        if((to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ()) &&
-                plugin.getPlayerDataManager().getBorder_players().contains(player))
+        if((to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ()))
         {
-            PlotBorder plotBorder = new PlotBorder();
-            plotBorder.hideBorder(player, Bukkit.getWorld("world"));
-            plugin.getPlayerDataManager().getBorder_players().remove(player);
+            if(plugin.getPlayerDataManager().getBorder_players().contains(player))
+            {
+                PlotBorder plotBorder = new PlotBorder();
+                plotBorder.hideBorder(player, Bukkit.getWorld("world"));
+                plugin.getPlayerDataManager().getBorder_players().remove(player);
+            }
+
+            if(player.hasPermission("ownplots.admin"))
+            {
+                return;
+            }
+
+            Plot plot = plugin.getPlotManager().getPlotAt(to);
+            if(plot != null && !plot.isMember(player))
+            {
+                if(plot.isBanned(player.getName()) || plot.isClosed())
+                {
+                    event.setCancelled(true);
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&cta dzialka jest zamknieta lub jestes na niej zbanowany!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                }
+            }
         }
+
+
     }
 
 }

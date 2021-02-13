@@ -454,8 +454,19 @@ public class PlotCommand implements CommandExecutor {
                 Plot plot = PlotManager.getPlotByOfflineOwner(args[1]);
                 if(plot != null)
                 {
-                    if(plot.isBanned(player_name) || plot.isClosed())
+                    if(plot.isBanned(player_name) || (plot.isClosed() && !plot.isMember(player)))
                     {
+                        if(player.hasPermission("ownplots.admin"))
+                        {
+                            player.teleport(plot.getLocation());
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&eTeleportuje do dzialki gracza &c" + args[1] + "&e!"));
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () ->
+                            {
+                                player.chat("/dzialka border");
+                            }, 10L);
+                            return true;
+                        }
                         player.sendMessage(ChatUtil.fixColorsWithPrefix("&eta dzialka jest &czamknieta&e lub jestes na niej &czbanowany&e!"));
                         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                     }
@@ -554,15 +565,23 @@ public class PlotCommand implements CommandExecutor {
 
                 if(target != null && target.isOnline())
                 {
-                    final String target_name = target.getName();
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&ewyrzuciles gracza &c" + target_name + " &eze swojej dzialki!"));
-                    player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
+                    if(plot.isMember(target))
+                    {
+                        final String target_name = target.getName();
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&ewyrzuciles gracza &c" + target_name + " &eze swojej dzialki!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
 
-                    target.sendMessage(ChatUtil.fixColorsWithPrefix("&ezostales wyrzucony z dzialki o nazwie &c" + plot.getPlot_name() + " &cprzez &c" + player_name));
-                    target.playSound(target.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
+                        target.sendMessage(ChatUtil.fixColorsWithPrefix("&ezostales wyrzucony z dzialki o nazwie &c" + plot.getPlot_name() + " &cprzez &c" + player_name));
+                        target.playSound(target.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
 
-                    PlotManager plotManager = plugin.getPlotManager();
-                    plotManager.kickMember(plugin.getPlayerDataManager().getPlots().get(plot.getPlot_name()), target.getName());
+                        PlotManager plotManager = plugin.getPlotManager();
+                        plotManager.kickMember(plugin.getPlayerDataManager().getPlots().get(plot.getPlot_name()), target.getName());
+                    }
+                    else
+                    {
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&eten gracz nie jest dodany do dzialki!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                    }
                 }
                 else
                 {
