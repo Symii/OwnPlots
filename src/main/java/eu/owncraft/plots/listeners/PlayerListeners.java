@@ -348,6 +348,10 @@ public class PlayerListeners implements Listener {
     {
         Player player = event.getPlayer();
         Location to = event.getTo();
+        if(!to.getWorld().getName().equalsIgnoreCase("world"))
+        {
+            return;
+        }
         Location from = event.getFrom();
         if((to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ()))
         {

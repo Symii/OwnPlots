@@ -175,6 +175,11 @@ public class EntityListeners implements Listener {
             return;
         }
 
+        if(event.getEntityType() == EntityType.ARMOR_STAND)
+        {
+            return;
+        }
+
         Plot plot = plugin.getPlotManager().getPlotAt(event.getEntity().getLocation());
         if(plot != null)
         {
