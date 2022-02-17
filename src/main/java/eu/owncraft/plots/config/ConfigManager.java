@@ -8,6 +8,8 @@ public class ConfigManager {
     private final OwnPlots plugin;
     private int plot_create_cost, plot_max_size, plot_increase_field_cost, jump_boost_upgrade_cost,
         speed_upgrade_cost, mob_drop_upgrade_cost, mob_exp_upgrade_cost;
+    private boolean fly_enabled_only_on_plots;
+    private String allowed_world;
 
     public ConfigManager(OwnPlots plugin)
     {
@@ -27,6 +29,8 @@ public class ConfigManager {
         this.speed_upgrade_cost = config.getInt("speed-upgrade-cost");
         this.mob_drop_upgrade_cost = config.getInt("mob-drop-upgrade-cost");
         this.mob_exp_upgrade_cost = config.getInt("mob-exp-upgrade-cost");
+        this.fly_enabled_only_on_plots = config.getBoolean("fly-enabled-only-on-plots");
+        this.allowed_world = config.getString("allowed-world");
     }
 
     public int getPlot_create_cost()
@@ -64,4 +68,11 @@ public class ConfigManager {
         return  mob_exp_upgrade_cost;
     }
 
+    public boolean isFly_enabled_only_on_plots() {
+        return fly_enabled_only_on_plots;
+    }
+
+    public String getAllowed_world() {
+        return allowed_world;
+    }
 }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import eu.owncraft.plots.OwnPlots;
+import eu.owncraft.plots.challenge.Challenge;
 import eu.owncraft.plots.database.PlotManager;
 import eu.owncraft.plots.gui.PlotGUI;
 import eu.owncraft.plots.plot.Plot;
@@ -12,6 +13,7 @@ import eu.owncraft.plots.plot.PlotMember;
 import eu.owncraft.plots.utils.ChatUtil;
 import eu.owncraft.plots.utils.LocationUtil;
 import eu.owncraft.plots.utils.Utils;
+import net.ess3.api.MaxMoneyException;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -68,7 +70,7 @@ public class PlotCommand implements CommandExecutor {
         {
             if(args[0].equalsIgnoreCase("info"))
             {
-                if(!player.getWorld().getName().equalsIgnoreCase("world"))
+                if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
                 {
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&eaby uzyc tej komendy musisz sie znajdowac na mapie survival."));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -123,6 +125,36 @@ public class PlotCommand implements CommandExecutor {
                 {
                     player.openInventory(PlotGUI.getPlotBannedPlayersInventory(player, plot));
                     player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1.0f, 1.0f);
+                }
+                else
+                {
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz swojej dzialki!"));
+                }
+            }
+            else if(args[0].equalsIgnoreCase("opusc"))
+            {
+                Plot plot = PlotManager.getPlotByOwner(player_name);
+                if(plot != null)
+                {
+                    if(plot.getOwner().equalsIgnoreCase(player.getName())) {
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&cnie mozesz opuscic swojej dzialki, musisz ją usunąć!"));
+                        return true;
+                    }
+
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&2Pomyślnie opuściłeś działke o nazwie &b" + plot.getPlot_name() + " &2gracza &b" + plot.getOwner()));
+
+                    PlotManager plotManager = plugin.getPlotManager();
+                    plotManager.kickMember(plugin.getPlayerDataManager().getPlots().get(plot.getPlot_name()), player.getName());
+
+
+                    if(plugin.getPlayerDataManager().getBorder_players().contains(player))
+                    {
+                        plugin.getPlayerDataManager().getBorder_players().remove(player);
+                    }
+
+                    plugin.getPlayerDataManager().getPlotMember(player.getName()).setOwn_plot(null);
+                    plugin.getPlayerDataManager().getChallenge_players().remove(player.getName());
                 }
                 else
                 {
@@ -199,6 +231,12 @@ public class PlotCommand implements CommandExecutor {
             }
             else if(args[0].equalsIgnoreCase("akceptujzaproszenie"))
             {
+                if(OwnPlots.getInstance().getPlotManager().hasPlot(player)) {
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&cmasz juz swoja dzialke!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                    return true;
+                }
+
                 if(invite_players.containsKey(player_name))
                 {
                     Plot plot = invite_players.get(player_name);
@@ -217,6 +255,12 @@ public class PlotCommand implements CommandExecutor {
 
                     PlotManager plotManager = plugin.getPlotManager();
                     plotManager.addMember(plugin.getPlayerDataManager().getPlots().get(plot.getPlot_name()), player_name);
+
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(OwnPlots.getInstance(), () -> {
+                        PlotMember plotMember = plotManager.getPlotMember(player);
+                        plugin.getPlayerDataManager().addPlayerMember(player.getName(), plotMember);
+                        plugin.getPlayerDataManager().getChallenge_players().put(player.getName(), new Challenge(player));
+                    }, 10L);
                 }
                 else
                 {
@@ -291,6 +335,12 @@ public class PlotCommand implements CommandExecutor {
                 Plot plot = PlotManager.getPlotByOwner(player_name);
                 if(plot != null)
                 {
+                    if(player.getName().equalsIgnoreCase(plot.getOwner()) == false) {
+                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&ctylko wlasciciel dzialki moze usunac dzialke!"));
+                        return true;
+                    }
+
                     if(delete_confirm_players.contains(player_name))
                     {
                         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -341,7 +391,7 @@ public class PlotCommand implements CommandExecutor {
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&6wylaczyles border!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
                     PlotBorder plotBorder = new PlotBorder();
-                    plotBorder.hideBorder(player, player.getWorld());
+                    plotBorder.hideBorder(player);
                     return true;
                 }
                 if(plot == null)
@@ -421,6 +471,10 @@ public class PlotCommand implements CommandExecutor {
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&7Czy chodzilo ci o &e/dzialka dom [nick]"));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
+            }
+            else
+            {
+                sendHelpMessages(player);
             }
         }
         else if(args.length == 2)
@@ -556,6 +610,18 @@ public class PlotCommand implements CommandExecutor {
 
                 Player target = Bukkit.getPlayer(args[1]);
 
+                if(player.getName().equalsIgnoreCase(plot.getOwner()) == false) {
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&etylko wlasciciel dzialki moze wyrzucac graczy!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                    return true;
+                }
+
+                if(target.getName().equalsIgnoreCase(player.getName())) {
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz wyrzucic samego siebie!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                    return true;
+                }
+
                 if(plot.getOwner().equalsIgnoreCase(args[1]))
                 {
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz wyrzucic wlasciciela dzialki!"));
@@ -576,6 +642,15 @@ public class PlotCommand implements CommandExecutor {
 
                         PlotManager plotManager = plugin.getPlotManager();
                         plotManager.kickMember(plugin.getPlayerDataManager().getPlots().get(plot.getPlot_name()), target.getName());
+
+
+                        if(plugin.getPlayerDataManager().getBorder_players().contains(target))
+                        {
+                            plugin.getPlayerDataManager().getBorder_players().remove(target);
+                        }
+
+                        plugin.getPlayerDataManager().getPlotMember(target.getName()).setOwn_plot(null);
+                        plugin.getPlayerDataManager().getChallenge_players().remove(target.getName());
                     }
                     else
                     {
@@ -611,6 +686,12 @@ public class PlotCommand implements CommandExecutor {
                 Player target = Bukkit.getPlayer(args[1]);
                 if(target != null && target.isOnline())
                 {
+                    if(OwnPlots.getInstance().getPlotManager().hasPlot(target)) {
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&eten gracz ma juz dzialke!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+                        return true;
+                    }
+
                     final String target_name = target.getName();
                     if(plot.isMember(target))
                     {
@@ -693,7 +774,7 @@ public class PlotCommand implements CommandExecutor {
                     return true;
                 }
 
-                if(!player.getWorld().getName().equalsIgnoreCase("world"))
+                if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
                 {
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&edzialka musi byc stworzona na swiecie survival"));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -760,7 +841,7 @@ public class PlotCommand implements CommandExecutor {
 
                 try {
                     Economy.add(player.getName(), -plot_create_cost);
-                } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                     e.printStackTrace();
                     player.sendMessage(ChatUtil.fixColorsWithPrefix("&ewystapil nieoczekiwany blad..."));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -768,7 +849,7 @@ public class PlotCommand implements CommandExecutor {
                 }
 
                 PlotManager plotManager = OwnPlots.getInstance().getPlotManager();
-                plotManager.createPlot(owner, plot_name, location);
+                plotManager.createPlot(player, plot_name, location);
 
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 player.sendMessage(ChatUtil.fixColorsWithPrefix("&7Tworzenie dzialki..."));
@@ -802,7 +883,7 @@ public class PlotCommand implements CommandExecutor {
         player.sendMessage(ChatUtil.fixColors("&e/dzialka czlonkowie &7- wyswietla liste czlonkow dzialki"));
         player.sendMessage(ChatUtil.fixColors("&e/dzialka zapros [nick gracza] &7- zaprasza gracza do dzialki"));
         player.sendMessage(ChatUtil.fixColors("&e/dzialka usun &7- usuwa dzialke"));
-        player.sendMessage(ChatUtil.fixColors("&e/dzialka opusc [nazwa dzialki] &7- opuszcza dzialke jesli jestes czlonkiem"));
+        player.sendMessage(ChatUtil.fixColors("&e/dzialka opusc &7- opuszcza dzialke jesli jestes czlonkiem"));
         player.sendMessage(ChatUtil.fixColors("&e/dzialka ustawienia &7- wyswietla ustawienia dzialki"));
         player.sendMessage(ChatUtil.fixColors("&e/dzialka ulepszenia &7- wyswietla ulepszenia dzialki"));
         player.sendMessage(ChatUtil.fixColors("&e/dzialka border &7- wyswietla lub wylacza border dzialki na ktorej sie znajdujesz"));

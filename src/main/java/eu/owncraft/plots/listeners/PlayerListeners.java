@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +41,7 @@ public class PlayerListeners implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onProjectileHit(ProjectileHitEvent event)
     {
-        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -58,7 +59,7 @@ public class PlayerListeners implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
-        if(!player.getWorld().getName().equalsIgnoreCase("world")) {
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -207,7 +208,7 @@ public class PlayerListeners implements Listener {
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event)
     {
         Player player = event.getPlayer();
-        if(!player.getWorld().getName().equalsIgnoreCase("world"))
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -238,7 +239,7 @@ public class PlayerListeners implements Listener {
             return;
         }
         final Player player = event.getPlayer();
-        if(!player.getWorld().getName().equalsIgnoreCase("world"))
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -282,7 +283,7 @@ public class PlayerListeners implements Listener {
     public void onPlayerBucketFill(PlayerBucketFillEvent event)
     {
         Player player = event.getPlayer();
-        if(!player.getWorld().getName().equalsIgnoreCase("world"))
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -303,7 +304,7 @@ public class PlayerListeners implements Listener {
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
     {
         Player player = event.getPlayer();
-        if(!player.getWorld().getName().equalsIgnoreCase("world"))
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -325,10 +326,11 @@ public class PlayerListeners implements Listener {
     {
         if(!(event.getEntity() instanceof Player))
         {
+            event.setCancelled(true);
             return;
         }
         Player player = (Player) event.getEntity();
-        if(!player.getWorld().getName().equalsIgnoreCase("world"))
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -348,7 +350,7 @@ public class PlayerListeners implements Listener {
     {
         Player player = event.getPlayer();
         Location to = event.getTo();
-        if(!to.getWorld().getName().equalsIgnoreCase("world"))
+        if(!to.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -358,7 +360,7 @@ public class PlayerListeners implements Listener {
             if(plugin.getPlayerDataManager().getBorder_players().contains(player))
             {
                 PlotBorder plotBorder = new PlotBorder();
-                plotBorder.hideBorder(player, Bukkit.getWorld("world"));
+                plotBorder.hideBorder(player);
                 plugin.getPlayerDataManager().getBorder_players().remove(player);
             }
 
@@ -380,6 +382,29 @@ public class PlayerListeners implements Listener {
         }
 
 
+    }
+
+    @EventHandler
+    public void onPlayerBow(EntityShootBowEvent event) {
+        if(!(event.getEntity() instanceof Player))
+        {
+            return;
+        }
+        Player player = (Player) event.getEntity();
+        if(!player.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
+        {
+            return;
+        }
+        if(player.hasPermission("ownplots.admin"))
+        {
+            return;
+        }
+        Plot plot = plugin.getPlotManager().getPlotAt(player.getLocation());
+        if(plot != null && !plot.isMember(player) && !plot.getVisitorsSettings().isItem_pickup())
+        {
+            event.setCancelled(true);
+            player.sendMessage(ChatUtil.fixColorsWithPrefix("&cjestes na terenie dzialki!"));
+        }
     }
 
 }

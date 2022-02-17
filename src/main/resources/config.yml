@@ -1,12 +1,19 @@
 mysql:
-  host: 172.16.10.22
-  database: owncraftfb
-  username: owncraftfb
-  password: yavvachteOdghewcarf$
+  enabled: false
+  host: "127.0.0.1"
+  database: "test"
+  username: "root"
+  password: ""
   port: 3306
-  table-plots: plots
-  table-plots-settings: plots-settings
-  table-plots-challenges: plots-challenges
+  table-plots: "dzialki"
+  table-plots-settings: "dzialki-ustawienia"
+  table-plots-challenges: "dzialki-wyzwania"
+
+# players will be able to create plots in this world
+allowed-world: "world"
+
+# true if fly should be enabled only if player is in plot area
+fly-enabled-only-on-plots: true
 
 # Cost for /ownplot create command
 plot-create-cost: 50000

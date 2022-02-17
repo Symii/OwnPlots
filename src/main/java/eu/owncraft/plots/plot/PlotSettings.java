@@ -19,7 +19,7 @@ public class PlotSettings {
 
         try
         {
-            PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement("SELECT * FROM `" + plugin.getDatabase().table_plots_settings + "` WHERE `plot-name`=?");
+            PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement("SELECT * FROM `" + plugin.getDatabase().getTable_plots_settings() + "` WHERE `plot-name`=?");
             statement.setString(1, plot_name);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -101,7 +101,7 @@ public class PlotSettings {
 
     public void save()
     {
-        this.plugin.getDatabase().update("UPDATE `" + plugin.getDatabase().table_plots_settings + "` SET `plot-settings`='" + this.convertToString() + "' WHERE `plot-name`='" + this.plot_name + "';");
+        this.plugin.getDatabase().update("UPDATE `" + plugin.getDatabase().getTable_plots_settings() + "` SET `plot-settings`='" + this.convertToString() + "' WHERE `plot-name`='" + this.plot_name + "';");
     }
 
     public static boolean getValueFromString(String string, String flag)

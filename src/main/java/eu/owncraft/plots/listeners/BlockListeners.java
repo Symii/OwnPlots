@@ -29,7 +29,7 @@ public class BlockListeners implements Listener {
     public void onBlockBreak(BlockBreakEvent event)
     {
         Location location = event.getBlock().getLocation();
-        if(!location.getWorld().getName().equalsIgnoreCase("world"))
+        if(!location.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -51,7 +51,7 @@ public class BlockListeners implements Listener {
     public void onBlockPlace(BlockPlaceEvent event)
     {
         Location location = event.getBlock().getLocation();
-        if(!location.getWorld().getName().equalsIgnoreCase("world"))
+        if(!location.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -73,7 +73,7 @@ public class BlockListeners implements Listener {
     public void onBlockBurn(BlockBurnEvent event)
     {
         Location location = event.getBlock().getLocation();
-        if(!location.getWorld().getName().equalsIgnoreCase("world"))
+        if(!location.getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }

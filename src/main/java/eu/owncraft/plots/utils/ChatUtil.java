@@ -13,7 +13,7 @@ public class ChatUtil {
 
     public static String fixColorsWithPrefix(final String text)
     {
-        return ChatColor.translateAlternateColorCodes('&', "&f&lO&9&lC &8» " + text);
+        return ChatColor.translateAlternateColorCodes('&', "&eDziałki &8» " + text);
     }
 
     public static List<String> fixColors(final List<String> list)
@@ -24,5 +24,4 @@ public class ChatUtil {
         }
         return list;
     }
-
 }

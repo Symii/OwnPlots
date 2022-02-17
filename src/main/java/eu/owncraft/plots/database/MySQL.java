@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class MySQL {
+public class MySQL implements IPlotDatabase {
 
     private OwnPlots plugin;
     private Connection connection;
@@ -72,7 +72,7 @@ public class MySQL {
     {
         try
         {
-            String query = "CREATE TABLE IF NOT EXISTS `" + database + "`.`" + plots_table + "` ( `id` INT NOT NULL AUTO_INCREMENT , `owner` TEXT NOT NULL , `plot-name` TEXT NOT NULL , `location` TEXT NOT NULL , `members` TEXT NOT NULL , `closed` BOOLEAN NOT NULL , `banned-players` TEXT NOT NULL , `level-data` TEXT NOT NULL , `upgrade-data` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
+            String query = "CREATE TABLE IF NOT EXISTS `" + database + "`.`" + plots_table + "` ( `id` INT NOT NULL AUTO_INCREMENT , `owner` TEXT NOT NULL , `plot-name` TEXT NOT NULL , `location` TEXT NOT NULL , `members` TEXT NOT NULL , `closed` BOOLEAN NOT NULL , `banned-players` TEXT NOT NULL , `level-data` TEXT NOT NULL , `upgrade-data` TEXT NOT NULL , `level` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
             PreparedStatement create_statement = connection.prepareStatement(query);
             create_statement.executeUpdate();
 
@@ -118,4 +118,37 @@ public class MySQL {
         return connection;
     }
 
+    @Override
+    public void onDisable()
+    {
+        disconnect();
+    }
+
+    @Override
+    public void disconnect()
+    {
+        try
+        {
+            connection.close();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getPlots_table() {
+        return plots_table;
+    }
+
+    @Override
+    public String getTable_plots_settings() {
+        return table_plots_settings;
+    }
+
+    @Override
+    public String getTable_plots_challenges() {
+        return table_plots_challenges;
+    }
 }

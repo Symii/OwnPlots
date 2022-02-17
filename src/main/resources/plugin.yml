@@ -1,8 +1,8 @@
 name: OwnPlots
 main: eu.owncraft.plots.OwnPlots
 author: Symi
-version: 1.0.7
-api-version: 1.16
+version: 1.1.9
+api-version: 1.18
 website: https://owncraft.eu
 description: This plugin allows players to create plots on survival world
 softdepend:
@@ -15,6 +15,8 @@ commands:
   challenge:
     aliases: [wyzwania,challenges]
     description: Challenges command
+  ranking:
+    description: Plots ranking command
 
 permissions:
   ownplots.bypass:

@@ -293,7 +293,6 @@ public class Plot {
         {
             return this;
         }
-
         return null;
     }
 

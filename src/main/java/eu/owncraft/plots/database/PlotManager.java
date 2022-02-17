@@ -1,15 +1,21 @@
 package eu.owncraft.plots.database;
 
 import eu.owncraft.plots.OwnPlots;
+import eu.owncraft.plots.challenge.Challenge;
 import eu.owncraft.plots.playerdata.PlayerDataManager;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.plot.PlotMember;
 import eu.owncraft.plots.plot.PlotSettings;
 import eu.owncraft.plots.plot.VisitorsSettings;
+import eu.owncraft.plots.utils.ChatUtil;
 import eu.owncraft.plots.utils.LocationUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
@@ -17,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PlotManager {
 
@@ -26,8 +34,8 @@ public class PlotManager {
     public PlotManager(OwnPlots plugin)
     {
         this.plugin = plugin;
-        this.plots_table = plugin.getDatabase().plots_table;
-        this.table_plots_settings = plugin.getDatabase().table_plots_settings;
+        this.plots_table = plugin.getDatabase().getPlots_table();
+        this.table_plots_settings = plugin.getDatabase().getTable_plots_settings();
     }
 
     public void savePlotAsync(final Plot plot)
@@ -43,6 +51,8 @@ public class PlotManager {
                             plot.getDiamond_blocks() + ";" + plot.getEmerald_blocks() + ";" +
                             plot.getNetherite_blocks() + ";" + plot.getBeacons() + ";";
 
+                    int level = plot.getLevel();
+
                     String upgrade_data = plot.isSpeed_upgrade() + ";" + plot.isJump_upgrade() + ";" +
                             plot.isMob_drop_upgrade() + ";" + plot.isMob_exp_upgrade() + ";" +
                             plot.getSize() + ";";
@@ -56,12 +66,13 @@ public class PlotManager {
 
 
                     PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement(
-                            "UPDATE `" + plots_table + "` SET `closed`=?, `banned-players`=?, `level-data`=?, `upgrade-data`=? WHERE `plot-name`=?");
+                            "UPDATE `" + plots_table + "` SET `closed`=?, `banned-players`=?, `level-data`=?, `upgrade-data`=?, `level`=? WHERE `plot-name`=?");
                     statement.setBoolean(1, plot.isClosed());
                     statement.setString(2, banned_players);
                     statement.setString(3, level_data);
                     statement.setString(4, upgrade_data);
-                    statement.setString(5, plot.getPlot_name());
+                    statement.setInt(5, level);
+                    statement.setString(6, plot.getPlot_name());
                     statement.executeUpdate();
                 }
                 catch(SQLException e)
@@ -90,19 +101,89 @@ public class PlotManager {
                 banned_players = banned_players + banned + ";";
             }
 
+            int level = plot.getLevel();
+
             PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement(
-                    "UPDATE `" + plots_table + "` SET `closed`=?, `banned-players`=?, `level-data`=?, `upgrade-data`=? WHERE `plot-name`=?");
+                    "UPDATE `" + plots_table + "` SET `closed`=?, `banned-players`=?, `level-data`=?, `upgrade-data`=?, `level`=? WHERE `plot-name`=?");
             statement.setBoolean(1, plot.isClosed());
             statement.setString(2, banned_players);
             statement.setString(3, level_data);
             statement.setString(4, upgrade_data);
-            statement.setString(5, plot.getPlot_name());
+            statement.setInt(5, level);
+            statement.setString(6, plot.getPlot_name());
             statement.executeUpdate();
         }
         catch(SQLException e)
         {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<ItemStack> getTopPlots()
+    {
+        ArrayList<ItemStack> topPlots = new ArrayList<>();
+        int counter = 0;
+
+        try {
+            PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement(
+                    "SELECT * FROM `" + plots_table + "` ORDER BY `level` DESC LIMIT 9");
+            ResultSet result = statement.executeQuery();
+            while(result.next())
+            {
+                String[] members = result.getString("members").split(";");
+
+                List<String> lore = new ArrayList<>();
+
+                lore.add("");
+                lore.add(ChatUtil.fixColors("&c* &b&lPoziom działki &7" + result.getInt("level")));
+                lore.add("");
+                lore.add(ChatUtil.fixColors("&c* &b&lMiejsce &7#" + (counter + 1)));
+                lore.add(ChatUtil.fixColors("&c* &b&lCzlonkow &7" + members.length));
+                lore.add("");
+                lore.add(ChatUtil.fixColors("&c* &b&lCzlonkowie:"));
+
+                for(int i = 0; i < members.length && i <= 8; i++)
+                {
+                    lore.add(ChatUtil.fixColors("  &f- &7" + members[i]));
+                    if(i >= 8) {
+                        lore.add("&7[&f...&7]");
+                    }
+                }
+
+                lore.add("");
+                lore.add(ChatUtil.fixColors("&7(( &fLewy przycisk &7&oaby teleportowac sie do warpa &7))"));
+
+                ItemStack one = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta oneMeta = (SkullMeta) one.getItemMeta();
+                oneMeta.setOwner(result.getString("owner"));
+                oneMeta.setDisplayName(ChatUtil.fixColors("&7#" + (counter + 1) + " Działka: &b&n" + result.getString("owner"))); // " &7{&f*&7}"
+                oneMeta.setLore(lore);
+                one.setItemMeta(oneMeta);
+
+                topPlots.add(one);
+
+                counter++;
+            }
+
+            for(int i = counter; i <= 8; i++)
+            {
+                ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta itemMeta = (SkullMeta) item.getItemMeta();
+                itemMeta.setOwner("Symi_");
+                itemMeta.setDisplayName(ChatUtil.fixColors("&7#" + (i + 1) + " Działka: &4&l&nBRAK &7{&f*&7}"));
+                itemMeta.setLore(ChatUtil.fixColors(Arrays.asList(
+                        "",
+                        "&cBrak danych..."
+                )));
+                item.setItemMeta(itemMeta);
+                topPlots.add(item);
+            }
+
+        } catch(SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return topPlots;
     }
 
 
@@ -154,7 +235,7 @@ public class PlotManager {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void createPlot(final String owner, final String plot_name, final String location)
+    public void createPlot(final Player owner, final String plot_name, final String location)
     {
         Location loc = LocationUtil.getLocationFromString(location);
         loc.add(0,-1,0).getBlock().setType(Material.BEDROCK);
@@ -176,27 +257,30 @@ public class PlotManager {
                     statement.setString(3, VisitorsSettings.getDefaultString());
                     statement.executeUpdate();
 
-                    query = "INSERT INTO `" + plots_table + "` (id, owner, `plot-name`, location, members, `closed`, `banned-players`, `level-data`, `upgrade-data`) " +
-                            "VALUES (NULL,?,?,?,?,?,?,?,?);";
+                    query = "INSERT INTO `" + plots_table + "` (id, owner, `plot-name`, location, members, `closed`, `banned-players`, `level-data`, `upgrade-data`, `level`) " +
+                            "VALUES (NULL,?,?,?,?,?,?,?,?,?);";
                     statement = plugin.getDatabase().getConnection().prepareStatement(query);
-                    statement.setString(1, owner);
+                    statement.setString(1, owner.getName());
                     statement.setString(2, plot_name);
                     statement.setString(3, location);
-                    statement.setString(4, owner + ";");
+                    statement.setString(4, owner.getName() + ";");
                     statement.setBoolean(5, false);
                     statement.setString(6, "");
                     statement.setString(7, level_data);
                     statement.setString(8, upgrade_data);
+                    statement.setInt(9, 0);
                     statement.executeUpdate();
 
                     ArrayList<String> members = new ArrayList<>();
-                    members.add(owner);
-                    Plot plot = new Plot(owner, LocationUtil.getLocationFromString(location), members, plot_name, false, new ArrayList<String>(), level_data, upgrade_data);
+                    members.add(owner.getName());
+                    Plot plot = new Plot(owner.getName(), LocationUtil.getLocationFromString(location), members, plot_name, false, new ArrayList<String>(), level_data, upgrade_data);
                     plugin.getPlayerDataManager().getPlots().put(plot_name, plot);
 
-                    PlotMember member = plugin.getPlayerDataManager().getPlotMember(owner);
+                    PlotMember member = plugin.getPlayerDataManager().getPlotMember(owner.getName());
                     member.setOwn_plot(plot_name);
-                    plugin.getPlayerDataManager().addPlayerMember(owner, member);
+                    plugin.getPlayerDataManager().addPlayerMember(owner.getName(), member);
+
+                    plugin.getPlayerDataManager().getChallenge_players().put(owner.getName(), new Challenge(owner));
                 }
                 catch (SQLException e)
                 {
@@ -210,13 +294,20 @@ public class PlotManager {
     {
         try
         {
-            PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement("SELECT * FROM `" + plots_table + "` WHERE `owner`=?");
-            statement.setString(1, player.getName());
+            PreparedStatement statement = plugin.getDatabase().getConnection()
+                    .prepareStatement("SELECT * FROM `" + plots_table + "` WHERE `members` LIKE '%" + player.getName() + "%'");
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next())
+            while(resultSet.next())
             {
-                String own_plot = resultSet.getString("plot-name");
-                return new PlotMember(player, own_plot);
+                String[] members = resultSet.getString("members").split(";");
+                for(int i = 0; i < members.length; i++)
+                {
+                    if(members[i].equalsIgnoreCase(player.getName()))
+                    {
+                        String own_plot = resultSet.getString("plot-name");
+                        return new PlotMember(player, own_plot);
+                    }
+                }
             }
         }
         catch(SQLException e)
@@ -326,10 +417,14 @@ public class PlotManager {
 
     public boolean hasPlot(Player player)
     {
-        if(plugin.getPlayerDataManager().getPlotMember(player.getName()).getOwn_plot() != null)
-        {
-            return true;
+        try {
+            if(plugin.getPlayerDataManager().getPlotMember(player.getName()).getOwn_plot() != null) {
+                return true;
+            }
+        } catch (NullPointerException exception) {
+            return false;
         }
+
         return false;
     }
 
@@ -369,6 +464,7 @@ public class PlotManager {
         return playerDataManager.getPlots().get(playerDataManager.getPlotMember(owner).getOwn_plot());
     }
 
+
     @Nullable
     public static Plot getPlotByOfflineOwner(String owner)
     {
@@ -378,6 +474,16 @@ public class PlotManager {
             if(plot.getOwner().equalsIgnoreCase(owner))
             {
                 return plot;
+            }
+            else
+            {
+                for(String s : plot.getMembers())
+                {
+                    if(s.equalsIgnoreCase(owner))
+                    {
+                        return plot;
+                    }
+                }
             }
         }
 

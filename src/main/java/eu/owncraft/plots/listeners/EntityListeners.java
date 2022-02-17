@@ -4,6 +4,7 @@ import eu.owncraft.plots.OwnPlots;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,7 @@ public class EntityListeners implements Listener {
     @EventHandler
     public void onHangingBreak(HangingBreakByEntityEvent event)
     {
-        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world"))
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world()))
         {
             return;
         }
@@ -46,7 +47,7 @@ public class EntityListeners implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
     {
         final String world_name = event.getEntity().getWorld().getName();
-        if(!world_name.equalsIgnoreCase("world")) {
+        if(!world_name.equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -123,7 +124,7 @@ public class EntityListeners implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event)
     {
-        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -137,7 +138,7 @@ public class EntityListeners implements Listener {
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
-        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -156,7 +157,7 @@ public class EntityListeners implements Listener {
     @EventHandler
     public void onLeavesDecayEvent(LeavesDecayEvent event)
     {
-        if(!event.getBlock().getWorld().getName().equalsIgnoreCase("world")) {
+        if(!event.getBlock().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())) {
             return;
         }
 
@@ -170,7 +171,7 @@ public class EntityListeners implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDeath(EntityDeathEvent event)
     {
-        if(!event.getEntity().getWorld().getName().equalsIgnoreCase("world")
+        if(!event.getEntity().getWorld().getName().equalsIgnoreCase(OwnPlots.getInstance().getConfig_manager().getAllowed_world())
                 || event.getEntity() instanceof Player) {
             return;
         }
@@ -192,12 +193,16 @@ public class EntityListeners implements Listener {
             {
                 for(ItemStack item : event.getDrops())
                 {
-                    int new_amount = item.getAmount() * 2;
-                    if(new_amount > 64)
-                    {
-                        new_amount = 64;
+                    if(item.getType() == Material.PLAYER_HEAD || item.getType().toString().contains("SHULKER")
+                            || item.getType().toString().contains("CHEST")) { continue; }
+                    else {
+                        int new_amount = item.getAmount() * 2;
+                        if(new_amount > 64)
+                        {
+                            new_amount = 64;
+                        }
+                        item.setAmount(new_amount);
                     }
-                    item.setAmount(new_amount);
                 }
             }
 

@@ -9,6 +9,7 @@ import eu.owncraft.plots.database.PlotManager;
 import eu.owncraft.plots.gui.PlotGUI;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -98,7 +99,7 @@ public class InventoryListeners implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                             plot.setSpeed_upgrade(true);
                             player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                             e.printStackTrace();
                         }
                     }
@@ -135,7 +136,7 @@ public class InventoryListeners implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                             plot.setJump_upgrade(true);
                             player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                             e.printStackTrace();
                         }
                     }
@@ -172,7 +173,7 @@ public class InventoryListeners implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                             plot.setMob_drop_upgrade(true);
                             player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                             e.printStackTrace();
                         }
                     }
@@ -209,7 +210,7 @@ public class InventoryListeners implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                             plot.setMob_exp_upgrade(true);
                             player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                             e.printStackTrace();
                         }
                     }
@@ -268,7 +269,7 @@ public class InventoryListeners implements Listener {
                                 plot.displayPlotBorder(player);
                                 OwnPlots.getInstance().getPlayerDataManager().getBorder_players().add(player);
                             }
-                        } catch (NoLoanPermittedException | UserDoesNotExistException e) {
+                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
                             e.printStackTrace();
                         }
                     }
@@ -527,6 +528,37 @@ public class InventoryListeners implements Listener {
                 player.openInventory(PlotGUI.getPlotBannedPlayersInventory(player, PlotManager.getPlotByOwner(player.getName())));
             }
         }
+        else if(event.getView().getTitle().equalsIgnoreCase(ChatUtil.fixColorsWithPrefix("&e&lRanking dzialek")))
+        {
+            event.setCancelled(true);
+            ItemStack item = event.getCurrentItem();
+            if(item == null || !item.hasItemMeta())
+            {
+                return;
+            }
+
+            if(!(event.getWhoClicked() instanceof Player))
+            {
+                return;
+            }
+
+            final Player player = (Player) event.getWhoClicked();
+
+            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&cOdśwież")))
+            {
+                player.closeInventory();
+                player.openInventory(PlotGUI.getRankingInventory(player));
+                player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 0.7f, 0.7f);
+            }
+            else if(item.getItemMeta().getDisplayName().contains("#"))
+            {
+                player.closeInventory();
+                String owner_name = item.getItemMeta().getDisplayName().substring(18);
+                player.chat("/d dom " + owner_name);
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 0.7f);
+            }
+
+        }
         else if(event.getView().getTitle().equalsIgnoreCase(ChatUtil.fixColorsWithPrefix("&e&lMenu dzialki")))
         {
             event.setCancelled(true);
@@ -564,8 +596,8 @@ public class InventoryListeners implements Listener {
             }
             else if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&aRanking")))
             {
-                player.closeInventory();
-                player.chat("/topplotslevel");
+                player.openInventory(PlotGUI.getRankingInventory(player));
+                player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 0.7f, 0.7f);
             }
             else if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&aCzlonkowie dzialki")))
             {
@@ -682,7 +714,7 @@ public class InventoryListeners implements Listener {
                 }
                 else
                 {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mysterydust give " + player.getName()
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give " + player.getName()
                             + " " + challenge.getMysteryDust(required_level));
                     challenge.setChallengeComplete(required_level);
 

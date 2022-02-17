@@ -32,7 +32,7 @@ public class ChallengeGUI {
 
         for(int i = 10; i<= 70; i += 10)
         {
-            int reward = 50 * i;
+            int reward = 200 * i;
             ItemStack plot_level = new ItemStack(Material.CHEST_MINECART);
             ItemMeta plot_level_meta = plot_level.getItemMeta();
             plot_level_meta.setDisplayName(ChatUtil.fixColors("&aPoziom " + i));
@@ -40,7 +40,7 @@ public class ChallengeGUI {
                     "&7[&f!&7] &7Aby wykonac to zadanie",
                     "     &7musisz miec " + i + " poziom dzialki",
                     "&7[&f!&7] &eNagrody:",
-                    "     &7- &a" + reward + " magicznego pylku",
+                    "     &7- &a" + reward + "$",
                     "",
                     "&eKliknij, aby odebrac nagrode!"
             )));
@@ -59,7 +59,7 @@ public class ChallengeGUI {
 
         for(int i = 80; i<= 140; i += 10)
         {
-            int reward = 50 * i;
+            int reward = 200 * i;
             ItemStack plot_level = new ItemStack(Material.CHEST_MINECART);
             ItemMeta plot_level_meta = plot_level.getItemMeta();
             plot_level_meta.setDisplayName(ChatUtil.fixColors("&aPoziom " + i));
@@ -67,7 +67,7 @@ public class ChallengeGUI {
                     "&7[&f!&7] &7Aby wykonac to zadanie",
                     "     &7musisz miec " + i + " poziom dzialki",
                     "&7[&f!&7] &eNagrody:",
-                    "     &7- &a" + reward + " magicznego pylku",
+                    "     &7- &a" + reward + "$",
                     "",
                     "&eKliknij, aby odebrac nagrode!"
             )));
@@ -86,7 +86,7 @@ public class ChallengeGUI {
 
         for(int i = 150; i<= 190; i += 10)
         {
-            int reward = 50 * i;
+            int reward = 200 * i;
             ItemStack plot_level = new ItemStack(Material.CHEST_MINECART);
             ItemMeta plot_level_meta = plot_level.getItemMeta();
             plot_level_meta.setDisplayName(ChatUtil.fixColors("&aPoziom " + i));
@@ -94,7 +94,7 @@ public class ChallengeGUI {
                     "&7[&f!&7] &7Aby wykonac to zadanie",
                     "     &7musisz miec " + i + " poziom dzialki",
                     "&7[&f!&7] &eNagrody:",
-                    "     &7- &a" + reward + " magicznego pylku",
+                    "     &7- &a" + reward + "$",
                     "",
                     "&eKliknij, aby odebrac nagrode!"
             )));
@@ -113,7 +113,7 @@ public class ChallengeGUI {
 
         for(int i = 200; i<= 220; i += 10)
         {
-            int reward = 50 * i;
+            int reward = 200 * i;
             ItemStack plot_level = new ItemStack(Material.CHEST_MINECART);
             ItemMeta plot_level_meta = plot_level.getItemMeta();
             plot_level_meta.setDisplayName(ChatUtil.fixColors("&aPoziom " + i));
@@ -121,7 +121,7 @@ public class ChallengeGUI {
                     "&7[&f!&7] &7Aby wykonac to zadanie",
                     "     &7musisz miec " + i + " poziom dzialki",
                     "&7[&f!&7] &eNagrody:",
-                    "     &7- &a" + reward + " magicznego pylku",
+                    "     &7- &a" + reward + "$",
                     "",
                     "&eKliknij, aby odebrac nagrode!"
             )));
@@ -136,7 +136,7 @@ public class ChallengeGUI {
             counter++;
         }
 
-        int reward = 50 * 250;
+        int reward = 200 * 250;
         ItemStack plot_level = new ItemStack(Material.CHEST_MINECART);
         ItemMeta plot_level_meta = plot_level.getItemMeta();
         plot_level_meta.setDisplayName(ChatUtil.fixColors("&aPoziom " + 250));
@@ -144,7 +144,7 @@ public class ChallengeGUI {
                 "&7[&f!&7] &7Aby wykonac to zadanie",
                 "     &7musisz miec " + 250 + " poziom dzialki",
                 "&7[&f!&7] &eNagrody:",
-                "     &7- &a" + reward + " magicznego pylku",
+                "     &7- &a" + reward + "$",
                 "",
                 "&eKliknij, aby odebrac nagrode!"
         )));

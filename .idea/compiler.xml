@@ -6,7 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="OwnPlots - SEL" />
+        <module name="OwnPlots - GITH" />
         <module name="OwnPlots" />
+        <module name="OwnPlots - NEW EDYCJA" />
+        <module name="OwnPlots - SELL" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="7" />

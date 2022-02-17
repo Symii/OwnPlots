@@ -18,9 +18,68 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlotGUI {
+
+    public static Inventory getRankingInventory(Player player)
+    {
+        Inventory inventory = Bukkit.createInventory(player, 45, ChatUtil.fixColorsWithPrefix("&e&lRanking dzialek"));
+
+        ItemStack black = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack white = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+
+        ArrayList topPlots = OwnPlots.getInstance().getPlotManager().getTopPlots();
+
+        inventory.setItem(14, (ItemStack) topPlots.get(0));
+
+        inventory.setItem(22, (ItemStack) topPlots.get(1));
+        inventory.setItem(23, (ItemStack) topPlots.get(2));
+        inventory.setItem(24, (ItemStack) topPlots.get(3));
+
+        inventory.setItem(30, (ItemStack) topPlots.get(4));
+        inventory.setItem(31, (ItemStack) topPlots.get(5));
+        inventory.setItem(32, (ItemStack) topPlots.get(6));
+        inventory.setItem(33, (ItemStack) topPlots.get(7));
+        inventory.setItem(34, (ItemStack) topPlots.get(8));
+
+        ItemStack refresh = new ItemStack(Material.APPLE);
+        ItemMeta refreshMeta = refresh.getItemMeta();
+        refreshMeta.setDisplayName(ChatUtil.fixColors("&cOdśwież"));
+        refresh.setItemMeta(refreshMeta);
+
+        inventory.setItem(0, black);
+        inventory.setItem(1, black);
+        inventory.setItem(2, black);
+        inventory.setItem(3, black);
+        inventory.setItem(4, black);
+        inventory.setItem(5, black);
+        inventory.setItem(6, black);
+        inventory.setItem(7, black);
+        inventory.setItem(8, black);
+        inventory.setItem(9, black);
+        inventory.setItem(11, white);
+        inventory.setItem(17, black);
+        inventory.setItem(18, black);
+        inventory.setItem(19, refresh);
+        inventory.setItem(20, white);
+        inventory.setItem(26, black);
+        inventory.setItem(27, black);
+        inventory.setItem(29, white);
+        inventory.setItem(35, black);
+        inventory.setItem(36, black);
+        inventory.setItem(37, black);
+        inventory.setItem(38, black);
+        inventory.setItem(39, black);
+        inventory.setItem(40, black);
+        inventory.setItem(41, black);
+        inventory.setItem(42, black);
+        inventory.setItem(43, black);
+        inventory.setItem(44, black);
+
+        return inventory;
+    }
 
     public static Inventory getMainInventory(Player player)
     {
@@ -297,6 +356,7 @@ public class PlotGUI {
             )));
 
         }
+
         speed.setItemMeta(speed_meta);
 
         ItemStack jump_boost = new ItemStack(Material.POTION);
