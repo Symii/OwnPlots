@@ -1,10 +1,13 @@
 name: OwnPlots
 main: eu.owncraft.plots.OwnPlots
 author: Symi
-version: 1.1.9
+version: 1.2.0
 api-version: 1.18
 website: https://owncraft.eu
 description: This plugin allows players to create plots on survival world
+depend:
+  - Vault
+  - WorldBorderAPI
 softdepend:
   - Essentials
 
@@ -24,4 +27,7 @@ permissions:
     default: op
   ownplots.admin:
     description: Permission for admins
+    default: op
+  ownplots.fly.bypass:
+    description: Bypass fly limit
     default: op

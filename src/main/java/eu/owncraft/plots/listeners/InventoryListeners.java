@@ -1,15 +1,11 @@
 package eu.owncraft.plots.listeners;
 
-import com.earth2me.essentials.api.Economy;
-import com.earth2me.essentials.api.NoLoanPermittedException;
-import com.earth2me.essentials.api.UserDoesNotExistException;
 import eu.owncraft.plots.OwnPlots;
 import eu.owncraft.plots.challenge.Challenge;
 import eu.owncraft.plots.database.PlotManager;
 import eu.owncraft.plots.gui.PlotGUI;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
-import net.ess3.api.MaxMoneyException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -68,12 +64,8 @@ public class InventoryListeners implements Listener {
             }
 
             final Player player = (Player) event.getWhoClicked();
-            int money = 0;
-            try {
-                money = Economy.getMoneyExact(player.getUniqueId()).intValue();
-            } catch (UserDoesNotExistException e) {
-                e.printStackTrace();
-            }
+            long money = OwnPlots.getInstance().getPlayerMoney(player);
+
             if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&bUlepszenie speeda")))
             {
                 int cost = OwnPlots.getInstance().getConfig_manager().getSpeed_upgrade_cost();
@@ -93,15 +85,11 @@ public class InventoryListeners implements Listener {
                     }
                     if(money >= cost)
                     {
-                        try {
-                            Economy.add(player.getName(), -cost);
-                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie speeda II!"));
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                            plot.setSpeed_upgrade(true);
-                            player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
-                            e.printStackTrace();
-                        }
+                        OwnPlots.getInstance().takePlayerMoney(player, cost);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie speeda II!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        plot.setSpeed_upgrade(true);
+                        player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
                     }
                     else
                     {
@@ -130,15 +118,11 @@ public class InventoryListeners implements Listener {
                     }
                     if(money >= cost)
                     {
-                        try {
-                            Economy.add(player.getName(), -cost);
-                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie jump boost II!"));
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                            plot.setJump_upgrade(true);
-                            player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
-                            e.printStackTrace();
-                        }
+                        OwnPlots.getInstance().takePlayerMoney(player, cost);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie jump boost II!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        plot.setJump_upgrade(true);
+                        player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
                     }
                     else
                     {
@@ -167,15 +151,11 @@ public class InventoryListeners implements Listener {
                     }
                     if(money >= cost)
                     {
-                        try {
-                            Economy.add(player.getName(), -cost);
-                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie drop z mobow x2!"));
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                            plot.setMob_drop_upgrade(true);
-                            player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
-                            e.printStackTrace();
-                        }
+                        OwnPlots.getInstance().takePlayerMoney(player, cost);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie drop z mobow x2!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        plot.setMob_drop_upgrade(true);
+                        player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
                     }
                     else
                     {
@@ -204,15 +184,11 @@ public class InventoryListeners implements Listener {
                     }
                     if(money >= cost)
                     {
-                        try {
-                            Economy.add(player.getName(), -cost);
-                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie exp z mobow x2!"));
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                            plot.setMob_exp_upgrade(true);
-                            player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
-                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
-                            e.printStackTrace();
-                        }
+                        OwnPlots.getInstance().takePlayerMoney(player, cost);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Ulepszenie exp z mobow x2!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        plot.setMob_exp_upgrade(true);
+                        player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
                     }
                     else
                     {
@@ -253,24 +229,20 @@ public class InventoryListeners implements Listener {
                 {
                     if(money >= cost)
                     {
-                        try {
-                            Economy.add(player.getName(), -cost);
-                            player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Powiekszenie rozmiaru dzialki!"));
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                            plot.setSize(plot.getSize() + 16);
-                            player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
+                        OwnPlots.getInstance().takePlayerMoney(player, cost);
+                        player.sendMessage(ChatUtil.fixColorsWithPrefix("&bzakupiles Powiekszenie rozmiaru dzialki!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        plot.setSize(plot.getSize() + 16);
+                        player.openInventory(PlotGUI.getPlotUpgradeInventory(player, plot));
 
-                            if(OwnPlots.getInstance().getPlayerDataManager().getBorder_players().contains(player))
-                            {
-                                plot.displayPlotBorder(player);
-                            }
-                            else
-                            {
-                                plot.displayPlotBorder(player);
-                                OwnPlots.getInstance().getPlayerDataManager().getBorder_players().add(player);
-                            }
-                        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
-                            e.printStackTrace();
+                        if(OwnPlots.getInstance().getPlayerDataManager().getBorder_players().contains(player))
+                        {
+                            plot.displayPlotBorder(player);
+                        }
+                        else
+                        {
+                            plot.displayPlotBorder(player);
+                            OwnPlots.getInstance().getPlayerDataManager().getBorder_players().add(player);
                         }
                     }
                     else

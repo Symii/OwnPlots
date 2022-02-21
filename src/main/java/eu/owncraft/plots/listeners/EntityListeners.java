@@ -1,6 +1,7 @@
 package eu.owncraft.plots.listeners;
 
 import eu.owncraft.plots.OwnPlots;
+import eu.owncraft.plots.config.LanguageManager;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
 import org.bukkit.Bukkit;
@@ -18,9 +19,12 @@ import org.bukkit.inventory.ItemStack;
 public class EntityListeners implements Listener {
 
     private final OwnPlots plugin;
+    private LanguageManager languageManager;
+
     public EntityListeners(OwnPlots plugin)
     {
         this.plugin = plugin;
+        this.languageManager = OwnPlots.getInstance().getLanguageManager();
     }
 
 
@@ -73,7 +77,7 @@ public class EntityListeners implements Listener {
                 if(plot != null && !plot.isMember(damager))
                 {
                     event.setCancelled(true);
-                    damager.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz tego zrobic w tym miejscu!"));
+                    damager.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not-do-this")));
                     damager.playSound(damager.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
             }
@@ -90,7 +94,7 @@ public class EntityListeners implements Listener {
             if(plot != null && !plot.getPlotSettings().isPvp())
             {
                 event.setCancelled(true);
-                damager.sendMessage(ChatUtil.fixColorsWithPrefix("&ePvP jest &cwylaczone &ena tej dzialce!"));
+                damager.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-pvp")));
                 damager.playSound(damager.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
         }
@@ -115,7 +119,7 @@ public class EntityListeners implements Listener {
                     && !plot.getVisitorsSettings().isMob_damage())
             {
                 event.setCancelled(true);
-                damager.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz bic mobow na tej dzialce!"));
+                damager.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-mobs")));
                 damager.playSound(damager.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
         }

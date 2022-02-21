@@ -1,6 +1,7 @@
 package eu.owncraft.plots.listeners;
 
 import eu.owncraft.plots.OwnPlots;
+import eu.owncraft.plots.config.LanguageManager;
 import eu.owncraft.plots.events.PlayerEnterPlotEvent;
 import eu.owncraft.plots.events.PlayerExitPlotEvent;
 import eu.owncraft.plots.plot.Plot;
@@ -32,10 +33,12 @@ public class PlayerListeners implements Listener {
 
     private final OwnPlots plugin;
     private ArrayList<String> inside_plot_players = new ArrayList<>();
+    private LanguageManager languageManager;
 
     public PlayerListeners(OwnPlots plugin)
     {
         this.plugin = plugin;
+        this.languageManager = OwnPlots.getInstance().getLanguageManager();
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -69,7 +72,7 @@ public class PlayerListeners implements Listener {
             if(plot != null && !plot.isMember(player) && !plot.getVisitorsSettings().isTrample())
             {
                 event.setCancelled(true);
-                player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
         }
@@ -170,32 +173,32 @@ public class PlayerListeners implements Listener {
                     || type == Material.CHEST_MINECART || type.toString().contains("SHULKER_BOX")) && !visitorsSettings.isChest_access())
                 {
                     event.setCancelled(true);
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
                 else if(type.toString().contains("FURNACE") && !visitorsSettings.isFurnace_use())
                 {
                     event.setCancelled(true);
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
                 else if(type.toString().contains("DOOR") && !visitorsSettings.isDoor_use())
                 {
                     event.setCancelled(true);
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
                 else if((type.toString().contains("BUTTON") || type == Material.LEVER)
                     && !visitorsSettings.isButton_use())
                 {
                     event.setCancelled(true);
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
                 else
                 {
                     event.setCancelled(true);
-                    player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz na to pozwolenia!"));
+                    player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not")));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 }
             }
@@ -225,7 +228,7 @@ public class PlayerListeners implements Listener {
             if(plot != null && !plot.getMembers().contains(player.getName()))
             {
                 event.setCancelled(true);
-                player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz tego zrobic na tej dzialce!"));
+                player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not-do-this-in-this-plot")));
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
         }
@@ -295,7 +298,7 @@ public class PlayerListeners implements Listener {
         if(plot != null && !plot.getMembers().contains(player.getName()))
         {
             event.setCancelled(true);
-            player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz tego zrobic na tej dzialce!"));
+            player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not-do-this-in-this-plot")));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
         }
     }
@@ -316,7 +319,7 @@ public class PlayerListeners implements Listener {
         if(plot != null && !plot.getMembers().contains(player.getName()))
         {
             event.setCancelled(true);
-            player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie mozesz tego zrobic na tej dzialce!"));
+            player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-can-not-do-this-in-this-plot")));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
         }
     }

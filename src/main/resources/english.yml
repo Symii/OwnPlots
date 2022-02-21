@@ -1,0 +1,126 @@
+plugin-prefix: "&f&lOwn&9&lPlots &8»"
+
+cancel-text: "CANCEL"
+confirm-text: "CONFIRM"
+
+# HELP MESSAGES
+help-create-plot: "&e/ownplot create [name] &7- will create a plot, the cost is &c$"
+help-plot-home: "&e/ownplot home <player name> &7- teleports to plot home"
+help-plot-kick: "&e/ownplot kick [player name] &7- kicks player from your plot"
+help-plot-level: "&e/ownplot level &7- check your plot level"
+help-plot-ban: "&e/ownplot ban [player name] &7- ban player on your plot"
+help-plot-unban: "&e/ownplot unban [player name] &7- unban player on your plot"
+help-plot-close: "&e/ownplot close &7- close your plot for visitors"
+help-plot-members: "&e/ownplot members &7- displays members list"
+help-plot-invite: "&e/ownplot invite [player name] &7- invite player to your plot"
+help-plot-delete: "&e/ownplot delete &7- deletes plot"
+help-plot-leave: "&e/ownplot leave &7- leave your plot"
+help-plot-settings: "&e/ownplot settings &7- plot settings"
+help-plot-upgrades: "&e/ownplot upgrades &7- plot upgrades"
+help-plot-border: "&e/ownplot border &7- display or disable plot border"
+help-plot-info: "&e/ownplot info &7- display info about plot you are on"
+help-plot-help: "&e/ownplot help &7- displays help messages"
+
+# ADMIN HELP MESSAGES
+help-plot-admin-text: "&c&lCommands for administrators:"
+help-plot-admin-delete: "&e/ownplot delete [player name] &7- delete player plot"
+
+# PLOT CREATION MESSAGES
+plot-creation: "&7Creating OwnPlot..."
+plot-creation-broadcast: "&7Player &e%player% &7just created a plot and named it &e%plot_name%"
+plot-creation-no-money: "&eyou dont have &c$%required_money%&e, you have got only &c$%money%"
+plot-creation-nearby-plot-error: "&ethere is another plot nearby!"
+plot-creation-height-error: "&ethe minimum plot creation height is Y40"
+plot-creation-spawn-error: "&eyou are too close to the spawn! The minimum distance is &6400 from spawn"
+plot-creation-name-error: "&ethere is already a plot with the given name! Choose another..."
+plot-creation-enabled-world-error: "&eThe plot must be created on survival world"
+plot-creation-name-special-chars-error: "&eplot name cannot contain special characters"
+plot-creation-name-length-error: "&eplot name must be &c4 to 10 characters long"
+plot-creation-already-plot-created-error: "&eyou already own the plot"
+
+plot-player-offline-error: "&ethis player is currently &coffline&e!"
+
+plot-invite-receive: "&eyou have received an invitation to a plot from the player &c%player_name% &e for a plot named &c%plot_name%"
+plot-invite-player: "&eYou invited the player &c %target_name% &e to your plot"
+plot-invite-error1: "&ethis player has an invitation pending!"
+plot-invite-error2: "&ethis player is already added to the plot!"
+plot-invite-error3: "&ethis player already has a plot!"
+plot-invite-error4: "&ethe maximum you can have %max% members per plot!"
+plot-invite-error5: "&eyou don't have any plot!"
+
+plot-kick-error1: "&ethis player is not added to the plot!"
+plot-kick-target: "&eyou have been kicked from the plot named &c%plot_name% &cby &c%player_name%"
+plot-kick-player: "&eyou just kicked &c%target_name% &efrom your plot!"
+plot-kick-error2: "&eyou cannot kick the leader!"
+plot-kick-error3: "&eyou cannot kick yourself!"
+plot-kick-error4: "&eonly the plot owner can kick players!"
+
+no-plot-error: "&eyou dont own any plot!"
+
+plot-unban-error1: "&ePlayer &c%ban_name% &eis not banned!"
+plot-unban: "&eYou just unbanned player &c%ban_name%&e!"
+
+plot-ban: "&eYou just banned player &c%ban_name%&e!"
+plot-ban-error1: "&etoo many players are banned on your plot!"
+plot-ban-error2: "&ebefore you ban anyone again, unban someone :)"
+plot-ban-error3: "&ePlayer &c%ban_name% &eis already banned!"
+
+plot-no-plot-error-target: "&ethis player does not have his plot!"
+
+plot-closed-error: "&ethis plot is closed or you are banned on it!"
+
+plot-command-no-permission: "&cyou have no permissions!"
+plot-admin-delete-plot: "&eyou deleted a player plot %player%"
+
+plot-home-help-message-tip: "&7Did you mean &e/ownplot home [nick]"
+
+plot-you-are-not-the-owner-error: "&eyou are not the owner of this plot!"
+no-plot-detected-error: "&eyou must be on the plot to use this command!"
+
+plot-border-toggle: "&ayou turned on borde!"
+plot-border-disable: "&6you turned off borde!"
+
+plot-leave-error1: "&cyou cannot leave your plot, you must remove it!"
+plot-leave: "&2You have successfully exited a plot named &b%plot_name% &2player &b%plot_owner%"
+
+plot-delete-error1: "&conly the owner of the plot may remove the plot!"
+plot-delete-error2: "&eyou already have a pending request for the removal of a plot of land!"
+plot-delete-confirm-message: "&edo you really want &c&lDELETE &eyour plor?"
+plot-delete-error3: "&eyou have no pending request for parcel removal!"
+plot-delete-success: "&6you deleted your plot!"
+plot-delete-error-errno: "&cError..."
+
+plot-delete-confirm-cancell: "&eyou canceled the request to delete the plot!"
+there-is-no-plot-invite: "&eyou have no pending invitation to the plot!"
+plot-invite-cancellation: "&eyou canceled the invitation to the plot!"
+plot-player-join-to-your-plot: "&ePlayer &5%player_name% &ejoined to your plot!"
+plot-target-join-plot: "&eyou have joined to plot owned by &c%plot_owner%!"
+plot-player-has-already-plot-error: "&cyou already have your plot!"
+plot-has-been-closed: "&eyour plot has been &cclosed&e!"
+plot-has-been-opened: "&eyour plot has been &aopened&e!"
+
+plot-info-name: "&eName: &7"
+plot-info-size: "&eSize: &7"
+plot-info-closed: "&ePlot is closed: &7"
+plot-info-bedrock: "&eBedrock position: &7"
+plot-info-owner: "&eOwner: &7"
+plot-info-level: "&eLevel: &7"
+plot-info-pkt: "&ePoints: &7"
+plot-info-banned: "&eBanned: &7"
+plot-info-members: "&eMembers: &7"
+plot-info-member-count: "&eMembers count: &7"
+plot-info-bans-count: "&eBanned count: &7"
+
+plot-command-blocked-in-this-world: "&eto use this command, you must be on the survival map."
+
+plot-protection-break: "&eyou are not allowed to destroy on player plot &c%plot_owner%"
+plot-protection-build: "&eyou are not allowed to build on a player plot &c%plot_owner%"
+plot-protection-can-not-do-this: "&eyou can't do that in this place!"
+plot-protection-pvp: "&ePvP is &cdisabled &eon this plot!"
+plot-protection-mobs: "&eyou can't kill the mobs on this plot!"
+plot-protection-fly: "&f&lO&9&lC &8| &cFLY is allowed only on plots."
+plot-protection-can-not-do-this-in-this-plot: "&eyou can't do that on this plot!"
+plot-protection-can-not: "&eyou do not have permission to do so!"
+
+plot-leave-message: "&eyou leave the plot area"
+plot-enter-message: "&eyou are entering the player plot &c%plot_owner%"

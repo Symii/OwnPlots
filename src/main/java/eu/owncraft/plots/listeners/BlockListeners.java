@@ -1,6 +1,7 @@
 package eu.owncraft.plots.listeners;
 
 import eu.owncraft.plots.OwnPlots;
+import eu.owncraft.plots.config.LanguageManager;
 import eu.owncraft.plots.database.PlotManager;
 import eu.owncraft.plots.plot.Plot;
 import eu.owncraft.plots.utils.ChatUtil;
@@ -18,11 +19,13 @@ public class BlockListeners implements Listener {
 
     private final OwnPlots plugin;
     PlotManager plotManager;
+    LanguageManager languageManager;
 
     public BlockListeners(OwnPlots plugin)
     {
         this.plugin = plugin;
         this.plotManager = new PlotManager(plugin);
+        this.languageManager = OwnPlots.getInstance().getLanguageManager();
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -42,7 +45,7 @@ public class BlockListeners implements Listener {
         if(plot != null && !plot.isMember(player) && !plot.getVisitorsSettings().isBlock_break())
         {
             event.setCancelled(true);
-            player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz uprawnien, aby niszczyc na dzialce gracza &c" + plot.getOwner()));
+            player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-break").replace("%plot_owner%", plot.getOwner())));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
         }
     }
@@ -64,7 +67,7 @@ public class BlockListeners implements Listener {
         if(plot != null && !plot.isMember(player) && !plot.getVisitorsSettings().isBlock_place())
         {
             event.setCancelled(true);
-            player.sendMessage(ChatUtil.fixColorsWithPrefix("&enie masz uprawnien, aby budowac na dzialce gracza &c" + plot.getOwner()));
+            player.sendMessage(ChatUtil.fixColorsWithPrefix(languageManager.getMessage("plot-protection-build").replace("%plot_owner%", plot.getOwner())));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
         }
     }

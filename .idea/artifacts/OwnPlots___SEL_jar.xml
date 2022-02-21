@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="OwnPlots - SEL:jar">
-    <output-path>$USER_HOME$/Desktop/Serwer/paper 1.18</output-path>
-    <root id="archive" name="OwnPlots - SEL.jar">
-      <element id="module-output" name="OwnPlots - SEL" />
-    </root>
-  </artifact>
-</component>

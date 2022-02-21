@@ -1,0 +1,126 @@
+plugin-prefix: "&f&lOwn&9&lPlots &8»"
+
+cancel-text: "ANULUJ"
+confirm-text: "POTWIERDZ"
+
+# HELP MESSAGES
+help-create-plot: "&e/dzialka stworz [nazwa] &7- tworzy dzialke, cena to &c$"
+help-plot-home: "&e/dzialka dom <nazwa gracza> &7- teleportuje do dzialki gracza lub do swojej dzialki"
+help-plot-kick: "&e/dzialka wyrzuc [nick gracza] &7- wyrzuca gracza z dzialki"
+help-plot-level: "&e/dzialka poziom &7- sprawdza poziom dzialki"
+help-plot-ban: "&e/dzialka ban [nick gracza] &7- banuje gracza na dzialce"
+help-plot-unban: "&e/dzialka unban [nick gracza] &7- odbanowuje gracza na dzialce"
+help-plot-close: "&e/dzialka zamknij &7- zamyka dostep dla odwiedzajacych na dzialce"
+help-plot-members: "&e/dzialka czlonkowie &7- wyswietla liste czlonkow dzialki"
+help-plot-invite: "&e/dzialka zapros [nick gracza] &7- zaprasza gracza do dzialki"
+help-plot-delete: "&e/dzialka usun &7- usuwa dzialke"
+help-plot-leave: "&e/dzialka opusc &7- opuszcza dzialke jesli jestes czlonkiem"
+help-plot-settings: "&e/dzialka ustawienia &7- wyswietla ustawienia dzialki"
+help-plot-upgrades: "&e/dzialka ulepszenia &7- wyswietla ulepszenia dzialki"
+help-plot-border: "&e/dzialka border &7- wyswietla lub wylacza border dzialki na ktorej sie znajdujesz"
+help-plot-info: "&e/dzialka info &7- wyswietla informacje o dzialce na ktorej sie znajdujesz"
+help-plot-help: "&e/dzialka pomoc &7- wyswietla pomocne komendy"
+
+# ADMIN HELP MESSAGES
+help-plot-admin-text: "&c&lKomendy dla admina:"
+help-plot-admin-delete: "&e/dzialka usun [nazwa gracza] &7- usuwa dzialke gracza"
+
+# PLOT CREATION MESSAGES
+plot-creation: "&7Tworzenie działki..."
+plot-creation-broadcast: "&7Gracz &e%player% &7stworzył działkę o nazwie &e%plot_name%"
+plot-creation-no-money: "&enie posiadasz &c$%required_money%&e, masz tylko &c$%money%"
+plot-creation-nearby-plot-error: "&ew poblizu znajduje sie inna dzialka!"
+plot-creation-height-error: "&eminimalna wysokosc utworzenia dzialki to Y40"
+plot-creation-spawn-error: "&eznajdujesz sie zbyt blisko spawnu! Minimalna odleglosc to &6400 kratek od spawnu"
+plot-creation-name-error: "&eistnieje juz dzialka o podanej nazwie! Wybierz inna..."
+plot-creation-enabled-world-error: "&edzialka musi byc stworzona na swiecie survival"
+plot-creation-name-special-chars-error: "&enazwa dzialki nie moze zawierac znakow specjalnych"
+plot-creation-name-length-error: "&enazwa dzialki musi miec od &c4 do 10 znakow"
+plot-creation-already-plot-created-error: "&ejestes juz wlascicielem dzialki"
+
+plot-player-offline-error: "&eten gracz jest &coffline&e!"
+
+plot-invite-receive: "&eotrzymales zaproszenie do dzialki od gracza &c%player_name%&e do dzialki o nazwie &c%plot_name%"
+plot-invite-player: "&ezaprosiles gracza &c%target_name% &e do swojej dzialki"
+plot-invite-error1: "&eten gracz ma juz oczekujace zaproszenie!"
+plot-invite-error2: "&eten gracz jest juz dodany do dzialki!"
+plot-invite-error3: "&eten gracz ma juz dzialke!"
+plot-invite-error4: "&emaksymalnie mozesz miec %max% czlonkow na dzialce!"
+plot-invite-error5: "&enie masz swojej dzialki!"
+
+plot-kick-error1: "&eten gracz nie jest dodany do dzialki!"
+plot-kick-target: "&ezostales wyrzucony z dzialki o nazwie &c%plot_name% &cprzez &c%player_name%"
+plot-kick-player: "&ewyrzuciles gracza &c%target_name% &eze swojej dzialki!"
+plot-kick-error2: "&enie mozesz wyrzucic wlasciciela dzialki!"
+plot-kick-error3: "&enie mozesz wyrzucic samego siebie!"
+plot-kick-error4: "&etylko wlasciciel dzialki moze wyrzucac graczy!"
+
+no-plot-error: "&enie masz swojej dzialki!"
+
+plot-unban-error1: "&eGracz &c%ban_name% &enie jest zbanowany!"
+plot-unban: "&eOdbanowales gracza &c%ban_name%&e!"
+
+plot-ban: "&eZbanowales gracza &c%ban_name%&e!"
+plot-ban-error1: "&ezbyt duzo graczy jest zbanowanych na twojej dzialce!"
+plot-ban-error2: "&ezanim kogos znowu zbanujesz, &bodbanuj &ekogos :)"
+plot-ban-error3: "&eGracz &c%ban_name% &ejest juz zbanowany!"
+
+plot-no-plot-error-target: "&eten gracz nie posiada swojej dzialki!"
+
+plot-closed-error: "&eta dzialka jest &czamknieta&e lub jestes na niej &czbanowany&e!"
+
+plot-command-no-permission: "&cnie posiadasz uprawnien!"
+plot-admin-delete-plot: "&eusuneles dzialke gracza %player%"
+
+plot-home-help-message-tip: "&7Czy chodzilo ci o &e/dzialka dom [nick]"
+
+plot-you-are-not-the-owner-error: "&enie jestes wlascicielem tej dzialki!"
+no-plot-detected-error: "&eaby uzyc tej komendy musisz sie znajdowac na dzialce!"
+
+plot-border-toggle: "&awłączyłeś border!"
+plot-border-disable: "&6wylaczyles border!"
+
+plot-leave-error1: "&cnie mozesz opuscic swojej dzialki, musisz ją usunąć!"
+plot-leave: "&2Pomyślnie opuściłeś działke o nazwie &b%plot_name% &2gracza &b%plot_owner%"
+
+plot-delete-error1: "&ctylko wlasciciel dzialki moze usunac dzialke!"
+plot-delete-error2: "&emasz juz oczekujace zapytanie o usuniecie dzialki!"
+plot-delete-confirm-message: "&eczy aby napewno chcesz &c&lUSUNAC &edzialke?"
+plot-delete-error3: "&enie masz zadnego oczekujacego zapytania o usuniecie dzialki!"
+plot-delete-success: "&6usuneles swoja dzialke!"
+plot-delete-error-errno: "&cBłąd..."
+
+plot-delete-confirm-cancell: "&eanulowales prośbę o usunięcie działki!"
+there-is-no-plot-invite: "&enie masz zadnego oczekujacego zaproszenia do dzialki!"
+plot-invite-cancellation: "&eanulowales zaproszenie do dzialki!"
+plot-player-join-to-your-plot: "&eGracz &5%player_name% &edolaczyl do twojej dzialki!"
+plot-target-join-plot: "&edolaczyles do dzialki gracza &c%plot_owner%!"
+plot-player-has-already-plot-error: "&cmasz juz swoja dzialke!"
+plot-has-been-closed: "&etwoja dzialka została &czamknieta&e!"
+plot-has-been-opened: "&etwoja dzialka została &aotwarta&e!"
+
+plot-info-name: "&eNazwa: &7"
+plot-info-size: "&eRozmiar: &7"
+plot-info-closed: "&eDzialka jest zamknieta: &7"
+plot-info-bedrock: "&ePozycja bedrocka: &7"
+plot-info-owner: "&eWlasciciel: &7"
+plot-info-level: "&ePoziom: &7"
+plot-info-pkt: "&ePunkty: &7"
+plot-info-banned: "&eZbanowani: &7"
+plot-info-members: "&eCzlonkowie: &7"
+plot-info-member-count: "&eLiczba czlonkow: &7"
+plot-info-bans-count: "&eLiczba zbanowanych: &7"
+
+plot-command-blocked-in-this-world: "&eaby uzyc tej komendy musisz sie znajdowac na mapie survival."
+
+plot-protection-break: "&enie masz uprawnien, aby niszczyc na dzialce gracza &c%plot_owner%"
+plot-protection-build: "&enie masz uprawnien, aby budowac na dzialce gracza &c%plot_owner%"
+plot-protection-can-not-do-this: "&enie mozesz tego zrobic w tym miejscu!"
+plot-protection-pvp: "&ePvP jest &cwylaczone &ena tej dzialce!"
+plot-protection-mobs: "&enie mozesz bic mobow na tej dzialce!"
+plot-protection-fly: "&f&lO&9&lC &8| &cFLY jest dozwolony tylko na działkach."
+plot-protection-can-not-do-this-in-this-plot: "&enie mozesz tego zrobic na tej dzialce!"
+plot-protection-can-not: "&enie masz na to pozwolenia!"
+
+plot-leave-message: "&eopuszczasz teren dzialki"
+plot-enter-message: "&ewchodzisz na teren dzialki gracza &c%plot_owner%"

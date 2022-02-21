@@ -9,6 +9,12 @@ mysql:
   table-plots-settings: "dzialki-ustawienia"
   table-plots-challenges: "dzialki-wyzwania"
 
+# Available languages: english & polish
+language: "polish"
+
+# Check for updates and notify
+update-checker: true
+
 # players will be able to create plots in this world
 allowed-world: "world"
 
@@ -19,8 +25,7 @@ fly-enabled-only-on-plots: true
 plot-create-cost: 50000
 
 # Max size for plots
-# Every upgrade plot size increase
-# its size by +16
+# You can set values only divided by 16
 plot-max-size: 64
 
 # Cost for increasing field upgrade
